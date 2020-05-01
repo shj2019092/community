@@ -3,6 +3,9 @@ package com.shj.community.mapper;
 import com.shj.community.model.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Service;
 
 @Mapper
 public interface UserMapper {
@@ -12,4 +15,6 @@ public interface UserMapper {
     void insertUser(User user);
 
 
+    @Select("select * from user where token=#{token}")
+    User findByToken(@Param("token") String token);
 }
