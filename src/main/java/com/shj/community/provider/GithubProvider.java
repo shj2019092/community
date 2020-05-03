@@ -7,7 +7,6 @@ import okhttp3.*;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 
 @Component
 public class GithubProvider {
@@ -27,9 +26,10 @@ public class GithubProvider {
             String[] split = string.split("&");
             String tokenStr = split[0];
             String token = tokenStr.split("=")[1];
-
+            System.out.println(token);
             return token;
         } catch (Exception e) {
+            System.out.println("token出错");
             e.printStackTrace();
         }
         return null;
@@ -46,6 +46,7 @@ public class GithubProvider {
             GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
             return githubUser;
         } catch (IOException e) {
+            System.out.println("user获取出错");
             e.printStackTrace();
         }
         return null;
