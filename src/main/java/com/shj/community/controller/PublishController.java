@@ -51,7 +51,7 @@ public class PublishController {
         }
         Cookie[] cookies = request.getCookies();
         User user=null;
-        if(cookies!=null) {
+        if(cookies!=null&&cookies.length!=0)
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
@@ -68,14 +68,11 @@ public class PublishController {
                         questionMapper.create(question);
                         return  "redirect:/";
 
-                    }else{
-                        model.addAttribute("error","用户未登录");
-                        return "publish";
                     }
 
                 }
             }
-        }
+
         model.addAttribute("error","用户未登录");
         return "publish";
     }
