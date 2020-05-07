@@ -1,20 +1,17 @@
 package com.shj.community.controller;
 
-import com.shj.community.dto.QuestionDTO;
-import com.shj.community.mapper.QuestionMapper;
+import com.shj.community.dto.PageDTO;
 import com.shj.community.mapper.UserMapper;
-import com.shj.community.model.Question;
 import com.shj.community.model.User;
 import com.shj.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.jws.WebParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  *
@@ -29,7 +26,9 @@ public class IndexController {
     private QuestionService questionService;
 
     @GetMapping("/")
-    public String hello(HttpServletRequest request, Model model){
+    public String hello(HttpServletRequest request, Model model,
+                        @RequestParam(name="page",defaultValue = "1")Integer page,
+                        @RequestParam(name="size",defaultValue = "2")Integer size){
         Cookie[] cookies = request.getCookies();
         if(cookies!=null&&cookies.length!=0)
             for (Cookie cookie : cookies) {
@@ -42,8 +41,8 @@ public class IndexController {
                     break;
                 }
             }
-        List<QuestionDTO> questionDTOSlist=questionService.list();
-        model.addAttribute("question",questionDTOSlist);
+        PageDTO pagination=questionService.list(page,size);
+        model.addAttribute("pagination",pagination);
 
         return  "index";
 
