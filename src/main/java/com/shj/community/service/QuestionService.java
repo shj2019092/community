@@ -26,18 +26,61 @@ public class QuestionService {
     public PageDTO list(Integer page, Integer size) {
         //size*(page-1)
         PageDTO pageDTO = new PageDTO();
+        Integer totalPage;
         Integer totalCount = questionMapper.count();
-        pageDTO.setPagination(totalCount,page,size);
+        if(totalCount%size==0){
+            totalPage=totalCount/size;
+        }else {
+            totalPage=totalCount/size+1;
+        }
+
         if(page<1){
             page=1;
         }
 
-        if(page>pageDTO.getTotalPage()){
-            page=pageDTO.getTotalPage();
+        if(page>totalPage){
+            page=totalPage;
 
         }
+        pageDTO.setPagination(totalPage,page);
         Integer offset=size*(page-1);
         List<Question> list = questionMapper.list(offset,size);
+        List<QuestionDTO> questionDTOList=new ArrayList<>();
+
+        for (Question question : list) {
+            User user = userMapper.findById(question.getCreator());
+            QuestionDTO questionDTO=new QuestionDTO();
+            BeanUtils.copyProperties(question,questionDTO);
+            questionDTO.setUser(user);
+            questionDTOList.add(questionDTO);
+        }
+        pageDTO.setQuestionDTOS(questionDTOList);
+
+        return pageDTO;
+    }
+
+    public PageDTO list(Integer userId, Integer page, Integer size) {
+        //size*(page-1)
+        PageDTO pageDTO = new PageDTO();
+        Integer totalPage;
+        Integer totalCount = questionMapper.countByUserId(userId);
+        if(totalCount%size==0){
+            totalPage=totalCount/size;
+        }else {
+            totalPage=totalCount/size+1;
+        }
+
+        if(page<1){
+            page=1;
+        }
+
+        if(page>totalPage){
+            page=totalPage;
+
+        }
+        pageDTO.setPagination(totalPage,page);
+        Integer offset=size*(page-1);
+        List<Question> list = questionMapper.listByUserId(userId,offset,size);
         List<QuestionDTO> questionDTOList=new ArrayList<>();
 
         for (Question question : list) {
