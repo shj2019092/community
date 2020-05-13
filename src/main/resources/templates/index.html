@@ -27,7 +27,8 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${pagination.title}"> </h4>
+                    <h4 class="media-heading" >
+                        <a th:href="@{'/question/'+ ${pagination.id}}"  th:text="${pagination.title}"></a> </h4>
 
                    <span  th:text="${pagination.description}"> </span>
                     <span class="text" th:text="${pagination.commentCount}"> </span>个回复。
